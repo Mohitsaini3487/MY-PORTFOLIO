@@ -1,21 +1,24 @@
 import React from "react";
+import certificate1 from '../components/certificate1.jpg';
+import certificate2 from '../components/certificate2.jpg';
+import certificate3 from '../components/certificate3.jpg';
 
 const Certifications: React.FC = () => {
   const certificates = [
     {
       title: "Software Engineering Job Simulation",
       issuer: "JPMORGAN CHASE & CO",
-      image: "/src/components/certificate1.jpg", // Replace with your actual file
+      image: certificate1, // Replace with your actual file
     },
     {
       title: "OCI 2025 Certified Generative AI Professional",
       issuer: "Oracle Certification Professional",
-      image: "/src/components/certificate2.jpg",
+      image: certificate2,
     },
     {
       title: "Privacy and Security in Online Social Media",
       issuer: "Nptel Online Certification",
-      image: "/src/components/certificate3.jpg",
+      image: certificate3,
     },
   ];
 
