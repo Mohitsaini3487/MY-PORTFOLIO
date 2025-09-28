@@ -7,6 +7,7 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import useActiveSection from './hooks/useActiveSection';
+import Certification from './components/Certification';
 
 function App() {
   const activeSection = useActiveSection();
@@ -18,6 +19,7 @@ function App() {
       <About />
       <Skills />
       <Projects />
+      <Certification /> 
       <Contact />
       <Footer />
     </div>

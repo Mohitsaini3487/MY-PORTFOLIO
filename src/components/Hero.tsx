@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
             <div className="mb-6">
               <h1 className="text-5xl lg:text-7xl font-bold mb-4 leading-tight">
                 <span className="block text-gray-300">Hello, I'm</span>
-                <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 bg-clip-text text-transparent animate-text-shimmer">
                   Mohit Saini
                 </span>
               </h1>

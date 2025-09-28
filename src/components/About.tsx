@@ -58,7 +58,7 @@ const About: React.FC = () => {
               (React, Node.js), and data analysis tools. Focused on building scalable AI-driven applications.
             </p>
             <p className="text-gray-300 leading-relaxed">
-              Currently building my portfolio with 4 innovative projects in 
+              Currently building my portfolio with 2 innovative projects in 
               full-stack development, ML, and data science — always eager to learn and grow.
             </p>
 

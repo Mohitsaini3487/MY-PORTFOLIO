@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  /* 🔥 Blink Border Animation */
+  @keyframes blink-border {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4),
+                  0 0 20px rgba(168, 85, 247, 0.2);
+      border-color: transparent;
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.9),
+                  0 0 50px rgba(168, 85, 247, 0.6);
+      border-color: rgba(168, 85, 247, 0.8);
+    }
+  }
+  .animate-blink-border {
+    animation: blink-border 1.5s infinite;
+  }
+
+  /* 🌊 Floating Idle Animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* 🎭 Tilt Effect on Hover */
+  .hover-tilt:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) scale(1.05);
+    transition: transform 0.5s ease;
+  }
+
+  /* ✨ Shimmer Overlay */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  .hover-shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%; width: 200%; height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .hover-shimmer:hover::after {
+    opacity: 1;
+  }
+}
