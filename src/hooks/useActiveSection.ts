@@ -5,8 +5,8 @@ const useActiveSection = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'projects', 'contact'];
-      const scrollPosition = window.scrollY + 100;
+      const sections = ['home', 'about', 'skills', 'journey', 'projects', 'certifications', 'contact'];
+      const scrollPosition = window.scrollY + 200; // Increased offset for better section detection
 
       for (const section of sections) {
         const element = document.getElementById(section);

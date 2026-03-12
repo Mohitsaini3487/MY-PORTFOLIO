@@ -1,114 +1,143 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
-import Project1 from '../components/Project1.jpg';
-import Project2 from '../components/Project2.jpg';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Projects: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const projects = [
     {
-      title: 'AI Career Coach',
-      description: `An intelligent career companion ...`,
-      technologies: ['Node.js', 'React', 'Prism', 'Inngest', 'Nona', 'Clerk Auth', 'ShadCN AI', 'Gemini API'],
-      image: Project1,
-      github: 'https://github.com/Mohitsaini3487/AI-CAREER-COACH',
-      live: 'https://ai-career-coach-zeta-rouge.vercel.app/'
+      title: 'BhartVest',
+      quote: '"Empowering users with real-time financial insights and seamless investment management."',
+      technologies: ['React', 'Vite', 'Tailwind CSS'],
+      github: 'https://github.com/Mohitsaini3487/BhartVest',
+      live: 'https://bhart-vest.vercel.app',
+      color: 'text-blue-400'
     },
     {
-      title: 'Fake News Detection',
-      description: `A smart platform to detect fake news ...`,
-      technologies: ['Python', 'React', 'AI Chatbot', 'NLP', 'Machine Learning'],
-      image: Project2,
-      github: 'https://github.com/Mohitsaini3487/deepLearning',
-      live: 'https://deep-learning-beta.vercel.app/'
+      title: 'SatyaSh App',
+      quote: '"A high-performance, responsive application designed for modern digital engagement."',
+      technologies: ['React', 'Tailwind CSS', 'Framer Motion'],
+      github: 'https://github.com/Mohitsaini3487/SatyaSh-App',
+      live: 'https://satya-sh-app.vercel.app',
+      color: 'text-purple-400'
+    },
+    {
+      title: 'Carewise Australia',
+      quote: '"Advanced healthcare solutions leveraging AI to provide accessible care for the community."',
+      technologies: ['React', 'AI', 'Tailwind CSS'],
+      github: 'https://github.com/carewiseaustralia-ai/carewiseproject',
+      live: 'https://www.carewiseaustralia.com.au/',
+      color: 'text-emerald-400'
+    },
+    {
+      title: 'Medical & Finance AI',
+      quote: '"Dual-model system featuring ResNet50 for tumor detection and LSTM for price prediction."',
+      technologies: ['Machine Learning', 'Flask', 'React'],
+      github: 'https://github.com/Mohitsaini3487/brain-tumor-',
+      live: 'https://github.com/Mohitsaini3487/brain-tumor-',
+      color: 'text-orange-400'
     }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Set initial state
+      gsap.set(".project-quote-card", { y: 60, opacity: 0, scale: 0.98 });
+
+      gsap.to(".project-quote-card", {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        stagger: 0.15,
+        duration: 1.5,
+        ease: "expo.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        }
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="projects" className="py-20 bg-gray-900">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 animate-fadeIn">
-            Featured Projects
+    <section id="projects" className="py-24 bg-dark-BASE relative overflow-hidden" ref={sectionRef}>
+      {/* Texture Background */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col items-center text-center mb-16">
+          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-brand-primary text-[9px] font-bold uppercase tracking-[0.4em] mb-4">
+            Spotlight
+          </div>
+          <h2 className="text-3xl lg:text-5xl font-display font-bold text-white mb-4 italic tracking-tighter">
+            Showcase <span className="text-gray-500 text-2xl lg:text-4xl">Projects</span>
           </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto animate-fadeIn delay-200">
-            A showcase of my recent work and the technologies I love working with
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div ref={containerRef} className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch justify-center">
           {projects.map((project, index) => (
-            <div
-              key={index}
-              className="group bg-gray-800 rounded-2xl shadow-2xl overflow-hidden 
-                         border border-gray-700
-                         transform transition-all duration-700 
-                         hover:scale-105 hover:-translate-y-2 hover:rotate-1
-                         hover:shadow-3xl hover:border-gradient 
-                         relative"
-            >
-              {/* Glowing animated border */}
-              <div className="absolute inset-0 rounded-2xl border-2 border-transparent 
-                              group-hover:border-pink-500/60 animate-pulse pointer-events-none"></div>
+            <React.Fragment key={index}>
+              <div className="project-quote-card group p-6 lg:p-8 relative bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col hover:bg-white/[0.04] transition-colors duration-500">
+                <div className="relative h-full flex flex-col">
+                  {/* Decorative Quote Mark */}
+                  <div className="absolute -top-4 -left-2 text-white/5 text-[6rem] font-serif leading-none pointer-events-none group-hover:text-brand-primary/10 transition-colors duration-700">
+                    “
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col h-full">
+                    <h3 className={`text-lg lg:text-xl font-display font-bold ${project.color} leading-snug mb-6 flex-grow group-hover:translate-x-1 transition-transform duration-700`}>
+                      {project.quote}
+                    </h3>
+                    
+                    <div className="pt-6 border-t border-white/5 mt-auto">
+                      <div className="flex flex-col mb-6">
+                        <span className="text-gray-700 text-[9px] font-bold uppercase tracking-widest mb-1">Project_{index + 1}</span>
+                        <span className="text-white text-lg font-display font-bold truncate">{project.title}</span>
+                      </div>
 
-              {/* Project Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-56 object-cover transition-transform duration-700 
-                             group-hover:scale-110 group-hover:rotate-3"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent 
-                                opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <a href={project.github} className="p-2 bg-white/90 rounded-full hover:bg-white transition-colors duration-300">
-                    <Github className="w-4 h-4 text-gray-700" />
-                  </a>
-                  <a href={project.live} className="p-2 bg-white/90 rounded-full hover:bg-white transition-colors duration-300">
-                    <ExternalLink className="w-4 h-4 text-gray-700" />
-                  </a>
+                      <div className="flex items-center gap-3">
+                        <a 
+                          href={project.github} 
+                          target="_blank" rel="noreferrer"
+                          className="flex items-center gap-2 text-white/30 hover:text-white transition-all bg-white/5 px-3 py-2 rounded-xl border border-white/5 hover:border-white/10"
+                        >
+                          <Github className="w-4 h-4" />
+                          <span className="text-[9px] font-bold uppercase tracking-widest">Code</span>
+                        </a>
+                        
+                        <a 
+                          href={project.live} 
+                          target="_blank" rel="noreferrer"
+                          className="flex items-center gap-2 text-brand-primary hover:bg-brand-primary hover:text-white transition-all bg-brand-primary/10 px-3 py-2 rounded-xl border border-brand-primary/20"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span className="text-[9px] font-bold uppercase tracking-widest">Live</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {/* Project Content */}
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-white mb-3 
-                               hover:text-teal-400 transition-colors duration-500 hover:scale-105 transform">
-                  {project.title}
-                </h3>
-                <p className="text-gray-300 text-sm mb-4 leading-relaxed">{project.description}</p>
-
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1 bg-gradient-to-r from-purple-600 to-pink-500 
-                                 text-white text-xs rounded-full font-medium border border-purple-700 
-                                 transition-transform duration-300 
-                                 hover:scale-110 hover:rotate-3 hover:shadow-lg"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Links */}
-                <div className="flex space-x-4">
-                  <a href={project.github} className="flex items-center space-x-2 text-gray-400 hover:text-blue-400 transition-colors duration-300 hover:scale-105 transform">
-                    <Github className="w-4 h-4" />
-                    <span className="text-sm">Code</span>
-                  </a>
-                  <a href={project.live} className="flex items-center space-x-2 text-gray-400 hover:text-teal-400 transition-colors duration-300 hover:scale-105 transform">
-                    <ExternalLink className="w-4 h-4" />
-                    <span className="text-sm">Live Demo</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+            </React.Fragment>
           ))}
         </div>
       </div>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes sparkVertical {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(500%); }
+        }
+      `}} />
     </section>
   );
 };

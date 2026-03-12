@@ -1,17 +1,59 @@
-import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, Github, Linkedin } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Mail, Phone, Send, Github, Linkedin } from "lucide-react";
 import emailjs from "@emailjs/browser";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const hubRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Entrance
+      gsap.from(hubRef.current, {
+        y: 60,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: hubRef.current,
+          start: "top 85%",
+        }
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  const handleMagneticMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    gsap.to(btn, {
+      x: x * 0.4,
+      y: y * 0.4,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
+
+  const handleMagneticLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    gsap.to(e.currentTarget, {
+      x: 0,
+      y: 0,
+      duration: 0.7,
+      ease: "elastic.out(1, 0.3)"
+    });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,137 +95,133 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-900 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-700 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/4 w-64 h-64 bg-pink-700 rounded-full mix-blend-multiply filter blur-3xl animate-pulse animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 left-1/2 w-64 h-64 bg-teal-600 rounded-full mix-blend-multiply filter blur-3xl animate-pulse animation-delay-4000"></div>
-      </div>
+    <section id="contact" className="py-32 bg-dark-BASE relative overflow-hidden" ref={sectionRef}>
+      {/* Background decoration */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-primary/5 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">Get In Touch</h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Ready to work together? Let's create something amazing!
-          </p>
-        </div>
+        <div ref={hubRef} className="max-w-5xl mx-auto rounded-[3.5rem] bg-dark-SURFACE/40 border border-white/5 backdrop-blur-3xl p-8 lg:p-20 shadow-3xl overflow-hidden relative">
+          
+          <div className="grid lg:grid-cols-5 gap-16 items-start">
+            {/* Info Side */}
+            <div className="lg:col-span-2 space-y-12">
+              <div>
+                <h2 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6">
+                  Ready to <span className="text-gray-500 italic">Chat?</span>
+                </h2>
+                <p className="text-gray-500 font-light leading-relaxed">
+                  Drop me a line or follow my work across the web. I'm always open to discussing new projects and technical innovations.
+                </p>
+              </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-8">Let's Start a Conversation</h3>
-            <div className="space-y-6 mb-8">
-              {[
-                { icon: Mail, label: "Email", value: "mohitdsaini.2005@gmail.com" },
-                { icon: Phone, label: "Phone", value: "+91 7494889287" },
-                { icon: MapPin, label: "Location", value: "India" },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                    <item.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white">{item.label}</h4>
-                    <p className="text-gray-300">{item.value}</p>
-                  </div>
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 text-gray-400 p-4 rounded-3xl bg-white/5 border border-white/5 hover:border-white/10 transition-all">
+                  <Mail size={18} className="text-brand-primary" />
+                  <span className="text-sm font-medium">mohitdsaini.2005@gmail.com</span>
                 </div>
-              ))}
-            </div>
+                <div className="flex items-center gap-4 text-gray-400 p-4 rounded-3xl bg-white/5 border border-white/5 hover:border-white/10 transition-all">
+                  <Phone size={18} className="text-brand-secondary" />
+                  <span className="text-sm font-medium">+91 7494889287</span>
+                </div>
+              </div>
 
-            {/* Social Links */}
-            <div>
-              <h4 className="font-semibold text-white mb-4">Follow Me</h4>
-              <div className="flex space-x-4">
-                {[
-                  { icon: Github, href: "https://github.com/Mohitsaini3487", label: "GitHub" },
-                  { icon: Linkedin, href: "https://www.linkedin.com/in/mohit-saini-n0/", label: "LinkedIn" },
-                ].map((social, idx) => (
-                  <a
-                    key={idx}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-gray-800 border border-gray-600 rounded-full shadow-md flex items-center justify-center hover:shadow-xl hover:scale-110 transform transition-all duration-300 group"
-                    aria-label={social.label}
-                  >
-                    <social.icon className="w-6 h-6 text-gray-400 group-hover:text-purple-500 transition-colors duration-300" />
-                  </a>
-                ))}
+              <div className="pt-8">
+                <h4 className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em] mb-6">Social Nexus</h4>
+                <div className="flex gap-4">
+                  {[
+                    { icon: Github, href: "https://github.com/Mohitsaini3487" },
+                    { icon: Linkedin, href: "https://www.linkedin.com/in/mohit-saini-n0/" },
+                  ].map((social, idx) => (
+                    <a
+                      key={idx}
+                      href={social.href}
+                      onMouseMove={handleMagneticMove}
+                      onMouseLeave={handleMagneticLeave}
+                      className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-brand-primary/50 transition-all duration-300"
+                    >
+                      <social.icon size={22} />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Contact Form */}
-          <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl p-8 relative">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+            {/* Form Side */}
+            <div className="lg:col-span-3">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your Name"
+                    className="w-full px-8 py-5 bg-white/5 border border-white/5 text-white rounded-2xl focus:border-brand-primary/50 outline-none transition-all placeholder:text-gray-700"
+                    required
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Your Email"
+                    className="w-full px-8 py-5 bg-white/5 border border-white/5 text-white rounded-2xl focus:border-brand-primary/50 outline-none transition-all placeholder:text-gray-700"
+                    required
+                  />
+                </div>
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="subject"
+                  value={formData.subject}
                   onChange={handleChange}
-                  placeholder="Your name"
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-purple-500 transition-all duration-300"
+                  placeholder="Subject"
+                  className="w-full px-8 py-5 bg-white/5 border border-white/5 text-white rounded-2xl focus:border-brand-primary/50 outline-none transition-all placeholder:text-gray-700"
                   required
                 />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                <textarea
+                  name="message"
+                  value={formData.message}
                   onChange={handleChange}
-                  placeholder="Your email"
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-purple-500 transition-all duration-300"
+                  placeholder="Tell me about your vision..."
+                  rows={4}
+                  className="w-full px-8 py-5 bg-white/5 border border-white/5 text-white rounded-2xl focus:border-brand-primary/50 outline-none transition-all placeholder:text-gray-700 resize-none"
                   required
                 />
-              </div>
-              <input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                placeholder="Subject"
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-purple-500 transition-all duration-300"
-                required
-              />
-              <textarea
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Your message..."
-                rows={6}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-purple-500 transition-all duration-300 resize-none"
-                required
-              />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="group w-full py-6 rounded-3xl font-display font-bold text-lg flex items-center justify-center gap-3 transition-all bg-white text-black hover:bg-brand-primary hover:text-white hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] overflow-hidden relative"
+                >
+                  {loading ? (
+                    <div className="w-6 h-6 border-2 border-gray-500 border-t-white rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <span className="relative z-10">Initialize Transmission</span>
+                      <Send size={20} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      <div className="absolute inset-0 bg-brand-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                    </>
+                  )}
+                </button>
+              </form>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-4 px-6 rounded-lg font-medium flex items-center justify-center space-x-2 transition-all duration-300 ${
-                  loading
-                    ? "bg-purple-700 scale-95 cursor-not-allowed"
-                    : "bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-105"
-                }`}
-              >
-                <Send className="w-5 h-5" />
-                <span>{loading ? "Sending..." : "Send Message"}</span>
-              </button>
-            </form>
-
-            {/* Animated Success Notification */}
-            {success && (
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-teal-400 to-purple-500 text-white px-6 py-3 rounded-lg shadow-lg animate-bounce z-50">
-                Thanks for reaching out, Mohit! Your request has been sent 🎉
+              {/* Status Notifications */}
+              <div className="absolute top-4 inset-x-0 flex justify-center pointer-events-none">
+                {success && (
+                  <div className="bg-emerald-500 text-white px-6 py-3 rounded-2xl shadow-xl animate-in fade-in zoom-in slide-in-from-top-4 duration-500">
+                    Message sent successfully! 🚀
+                  </div>
+                )}
+                {error && (
+                  <div className="bg-rose-500 text-white px-6 py-3 rounded-2xl shadow-xl animate-in fade-in zoom-in slide-in-from-top-4 duration-500">
+                    Something went wrong. Please try again.
+                  </div>
+                )}
               </div>
-            )}
-
-            {/* Animated Error Notification */}
-            {error && (
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg animate-bounce z-50">
-                Failed to send email ❌
-              </div>
-            )}
+            </div>
           </div>
+
+          {/* Glow accents */}
+          <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none" />
         </div>
       </div>
     </section>

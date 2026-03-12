@@ -1,105 +1,141 @@
-import React from 'react'; 
+import React, { useEffect, useRef } from 'react';
 import { Code, Coffee, Lightbulb, Users } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const leftContentRef = useRef<HTMLDivElement>(null);
+  const rightContentRef = useRef<HTMLDivElement>(null);
+
   const highlights = [
     {
       icon: Code,
       title: 'Clean Code',
-      description: 'Writing maintainable, scalable, and efficient code following best practices'
+      description: 'Writing maintainable, scalable, and efficient code following architecture patterns.'
     },
     {
       icon: Lightbulb,
       title: 'Problem Solver',
-      description: 'Approaching complex challenges with creative and innovative solutions'
+      description: 'Approaching AI challenges with innovative algorithms and creative solutions.'
     },
     {
       icon: Users,
       title: 'Team Player',
-      description: 'Collaborating effectively with cross-functional teams to deliver results'
+      description: 'Collaborating effectively to deliver high-impact digital experiences.'
     },
     {
       icon: Coffee,
-      title: 'Continuous Learner',
-      description: 'Always exploring new technologies and improving my craft'
+      title: 'Growth Mindset',
+      description: 'Always exploring the bleeding edge of AI and modern web technologies.'
     }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Title appearance
+      gsap.fromTo(titleRef.current,
+        { y: 30, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 1,
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 85%',
+          }
+        }
+      );
+
+      // Left content slide
+      gsap.fromTo(leftContentRef.current,
+        { x: -50, opacity: 0 },
+        {
+          x: 0, opacity: 1, duration: 1,
+          scrollTrigger: {
+            trigger: leftContentRef.current,
+            start: 'top 80%',
+          }
+        }
+      );
+
+      // Right cards stagger
+      gsap.fromTo(rightContentRef.current?.children || [],
+        { scale: 0.9, opacity: 0, y: 30 },
+        {
+          scale: 1, opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'back.out(1.2)',
+          scrollTrigger: {
+            trigger: rightContentRef.current,
+            start: 'top 80%',
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="about" className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
-      {/* Background glow orbs */}
-      <div className="absolute top-20 left-10 w-40 h-40 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-10 right-10 w-60 h-60 bg-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+    <section id="about" className="py-32 bg-dark-BASE relative overflow-hidden" ref={sectionRef}>
+      {/* Background patterns */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Title */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400 drop-shadow-md mb-4 animate-fade-in">
-            About Me
+        <div ref={titleRef} className="text-center mb-24">
+          <h2 className="text-4xl lg:text-6xl font-display font-bold text-white mb-6 tracking-tighter">
+            Elevating <span className="text-brand-primary">Intelligence</span> Through Design
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up">
-            Passionate developer with a love for creating digital solutions that make a real impact
-          </p>
+          <div className="w-24 h-1 bg-brand-primary mx-auto rounded-full shadow-[0_0_15px_#A855F7]"></div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Content */}
-          <div className="space-y-6 animate-slide-in-left">
-            <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
-              Building the Future with Code and Intelligence
+          <div ref={leftContentRef} className="space-y-8">
+            <h3 className="text-3xl lg:text-4xl font-display font-bold text-white leading-tight">
+              Bridging the gap between <br /> Data Science & Web Reality
             </h3>
-            <p className="text-gray-300 leading-relaxed">
-              As an aspiring Full-Stack Developer with expertise in Machine Learning and Data Science, 
-              I specialize in creating intelligent applications that solve real-world problems. 
-              My journey combines traditional web development with cutting-edge AI technologies.
+            <p className="text-gray-400 text-lg leading-relaxed font-light">
+              As an aspiring <span className="text-white font-medium">Machine Learning Analyst</span> and Full-Stack Developer, I build digital systems that don't just look pretty—they think. My approach combines rigorous data analysis with stunning interactive frontend experiences.
             </p>
-            <p className="text-gray-300 leading-relaxed">
-              Hands-on experience with Python (Scikit-learn, Keras), modern web stacks 
-              (React, Node.js), and data analysis tools. Focused on building scalable AI-driven applications.
-            </p>
-            <p className="text-gray-300 leading-relaxed">
-              Currently building my portfolio with 2 innovative projects in 
-              full-stack development, ML, and data science — always eager to learn and grow.
+            <p className="text-gray-400 text-lg leading-relaxed font-light">
+              I specialize in Python ecosystem (Scikit-learn, Keras) while mastering modern web stacks like React and Node.js. My goal is to create AI-driven applications that are accessible, high-performing, and beautiful.
             </p>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 mt-8">
-              <div className="text-center group hover:scale-110 transition-transform duration-300">
-                <div className="text-3xl font-extrabold text-blue-400 animate-bounce">4</div>
-                <div className="text-gray-400 text-sm">Projects</div>
-              </div>
-              <div className="text-center group hover:scale-110 transition-transform duration-300">
-                <div className="text-3xl font-extrabold text-teal-400 animate-pulse">5+</div>
-                <div className="text-gray-400 text-sm">Technologies</div>
-              </div>
-              <div className="text-center group hover:scale-110 transition-transform duration-300">
-                <div className="text-3xl font-extrabold text-purple-400 animate-bounce">4</div>
-                <div className="text-gray-400 text-sm">Team Members</div>
-              </div>
+            {/* Premium Stats Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 pt-6">
+              {[
+                { label: 'Major Projects', value: '4+', color: 'text-brand-primary' },
+                { label: 'Modern Techs', value: '10+', color: 'text-brand-secondary' },
+                { label: 'Success Rate', value: '92.89%', color: 'text-brand-accent' }
+              ].map((stat, i) => (
+                <div key={i} className="group cursor-default">
+                  <div className={`text-4xl font-display font-extrabold ${stat.color} mb-1 group-hover:scale-110 transition-transform`}>{stat.value}</div>
+                  <div className="text-gray-500 text-sm font-medium tracking-wider uppercase">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-slide-in-right">
+          {/* Feature Grid */}
+          <div ref={rightContentRef} className="grid sm:grid-cols-2 gap-6">
             {highlights.map((item, index) => (
-              <div 
+              <div
                 key={index}
-                className="relative p-6 rounded-2xl shadow-lg bg-gradient-to-br from-gray-700 to-gray-600 border border-gray-700 group hover:from-blue-700 hover:to-teal-600 hover:scale-105 transition-all duration-500"
+                className="p-8 rounded-3xl bg-dark-SURFACE border border-white/5 shadow-2xl group hover:border-brand-primary/30 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden"
               >
-                {/* Glow ring */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 blur-xl transition duration-500"></div>
-                
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:rotate-6 transition-transform duration-500">
-                    <item.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-white mb-2 group-hover:text-teal-200 transition-colors">
-                    {item.title}
-                  </h4>
-                  <p className="text-gray-300 text-sm">
-                    {item.description}
-                  </p>
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-brand-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-brand-primary/10 transition-colors">
+                  <item.icon className="w-7 h-7 text-brand-primary group-hover:scale-110 transition-transform" />
                 </div>
+                <h4 className="text-xl font-display font-bold text-white mb-3 tracking-tight">
+                  {item.title}
+                </h4>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
